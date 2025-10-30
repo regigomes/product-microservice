@@ -3,10 +3,13 @@ package tech.ada.product_microservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tech.ada.product_microservice.model.Product;
 import tech.ada.product_microservice.repository.ProductRepository;
+import tech.ada.product_microservice.repository.ProductSpecification;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -67,5 +70,10 @@ public class ProductService {
 
     public Product searchBySku(Long sku) {
         return this.productRepository.searchBySku(sku).stream().findFirst().orElse(null);
+    }
+
+    public List<Product> search(String description, BigDecimal minPrice, BigDecimal maxPrice) {
+        Specification<Product> spec = ProductSpecification.filterBy(description, minPrice, maxPrice);
+        return this.productRepository.findAll(spec);
     }
 }

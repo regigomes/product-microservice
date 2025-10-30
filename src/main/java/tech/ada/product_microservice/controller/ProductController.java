@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.ada.product_microservice.model.Product;
 import tech.ada.product_microservice.service.ProductService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -67,4 +68,11 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
+            @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice) {
+        return ResponseEntity.ok(this.productService.search(description, minPrice, maxPrice));
+    }
 }
